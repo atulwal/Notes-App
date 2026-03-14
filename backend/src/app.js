@@ -1,6 +1,9 @@
 import express from "express"
 import cors from "cors"
 import mongoose from "mongoose";
+import userRouter from "./routes/user.routes.js"
+import noteRouter from "./routes/note.routes.js"
+import cookieParser from "cookie-parser"
 
 const app = express();
 
@@ -10,8 +13,7 @@ app.use(express.urlencoded({limit: "16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser())
 
-import userRouter from "routes/user.routes.js"
-
 app.use("/users", userRouter)
+app.use("/notes", noteRouter)
 
 export {app}

@@ -1,11 +1,10 @@
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
-import {asyncHandler} from "../utils/asyncHandler.js"
-import { ApiError } from "../utils/apiError"
-import { ApiRes } from "../utils/ApiRes"
-import {User} from "../models/user.model.js"
-import { useReducer } from "react"
 import mongoose from "mongoose"
+import {asyncHandler} from "../utils/asyncHandler.js"
+import { ApiError } from "../utils/apiError.js"
+import { ApiRes } from "../utils/ApiRes.js"
+import {User} from "../models/user.model.js"
 
 const generateAccessAndRfreshTokens = asyncHandler(async (userId) => {
     try {
@@ -119,32 +118,8 @@ const loginUser = asyncHandler(async (req, res) => {
     )
 })
 
-const logoutUser = asyncHandler(async (req, res) => {
-    await User.findByIdAndUpdate(
-        req.user._id,
-        {
-            $set: {
-                refreshToken: undefined
-            }
-        },
-        {
-            new: true
-        }
-    )
-
-    const options = {
-        httpOnly: true,
-        secure: true
-    }
-    return res
-    .status(200)
-    .clearCookie("accessToken", options)
-    .clearCookie("refreshToken", options)
-    .json(new ApiRes(200, {}, "User logged out successfullly"))
-})
 
 export {
     registerUser,
     loginUser,
-    logoutUser
 }
